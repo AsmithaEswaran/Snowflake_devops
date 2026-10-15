@@ -1,4 +1,31 @@
 
+name: Deploy SQL to Snowflake
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get code from GitHub
+        uses: actions/checkout@v4
+
+      - name: Set up Snowflake CLI
+        uses: snowflakedb/snowflake-actions@v3
+        with:
+          cli-version: "latest"
+
       - name: Test Snowflake connection
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
